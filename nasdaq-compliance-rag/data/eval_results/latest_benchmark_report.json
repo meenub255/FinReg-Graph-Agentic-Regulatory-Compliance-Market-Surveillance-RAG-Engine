@@ -1,0 +1,229 @@
+{
+  "total_cases": 10,
+  "mean_context_recall": 1.0,
+  "mean_context_precision": 1.0,
+  "mean_faithfulness": 0.9675,
+  "mean_citation_accuracy": 0.9905,
+  "verdict_accuracy": 1.0,
+  "p50_latency_ms": 12.1,
+  "p95_latency_ms": 19.97,
+  "llm_backend": "Deterministic Institutional Regulatory Engine (Offline Ready)",
+  "qdrant_collection": "nasdaq_sec_regulatory_corpus",
+  "case_results": [
+    {
+      "case_id": "EVAL-01",
+      "category": "SEC Rule 15c3-5 (Market Access)",
+      "query": "A quantitative hedge fund routes orders directly to Nasdaq using our broker-dealer MPID via unfiltered sponsored access where credit thresholds are checked post-trade at end-of-day. Is this compliant?",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "15c3-5(b)",
+        "15c3-5(c)(1)"
+      ],
+      "retrieved_citations": [
+        "\u00a7 240.15c3-5(b)",
+        "\u00a7 240.15c3-5(c)",
+        "\u00a7 240.15c3-5(d)"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9965,
+      "citation_accuracy": 1.0,
+      "latency_ms": 12.22
+    },
+    {
+      "case_id": "EVAL-02",
+      "category": "SEC Rule 15c3-5 (Direct & Exclusive Control)",
+      "query": "Can a sponsoring broker-dealer allow a non-broker-dealer institutional client to dynamically modify or disable its own pre-trade erroneous order price collars during high volatility?",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "15c3-5(d)",
+        "15c3-5(c)(1)(ii)"
+      ],
+      "retrieved_citations": [
+        "\u00a7 240.15c3-5(d)",
+        "\u00a7 240.15c3-5(c)",
+        "\u00a7 240.15c3-5(b)"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9965,
+      "citation_accuracy": 1.0,
+      "latency_ms": 11.98
+    },
+    {
+      "case_id": "EVAL-03",
+      "category": "SEC Reg SHO (Locate & Close-Out Rule 203/204)",
+      "query": "A proprietary desk executes a speculative short sale without obtaining a pre-trade locate and fails to close out the resulting fail-to-deliver position past T+2. What rules are violated?",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "203(b)(1)",
+        "204(a)",
+        "204(b)"
+      ],
+      "retrieved_citations": [
+        "\u00a7 242.204",
+        "\u00a7 242.203"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9437,
+      "citation_accuracy": 1.0,
+      "latency_ms": 10.17
+    },
+    {
+      "case_id": "EVAL-04",
+      "category": "SEC Reg SHO (Rule 201 Circuit Breaker)",
+      "query": "What triggers the SEC Regulation SHO Rule 201 Alternative Uptick Rule circuit breaker on Nasdaq, how long does the restriction remain in effect, and how must short sale orders be priced?",
+      "expected_status": "INFORMATIONAL",
+      "predicted_status": "INFORMATIONAL",
+      "status_correct": true,
+      "expected_citations": [
+        "201(b)(1)"
+      ],
+      "retrieved_citations": [
+        "\u00a7 242.201",
+        "\u00a7 240.15c3-5(c)",
+        "\u00a7 242.200"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9656,
+      "citation_accuracy": 0.9524,
+      "latency_ms": 13.98
+    },
+    {
+      "case_id": "EVAL-05",
+      "category": "SEC Reg NMS (Rule 611 Intermarket Sweep Orders)",
+      "query": "Our Smart Order Router marked a limit buy order as an Intermarket Sweep Order (ISO) and executed on Nasdaq without routing simultaneous sweep orders to execute against a superior Protected Offer on another exchange.",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "611(a)(1)",
+        "611(b)(6)"
+      ],
+      "retrieved_citations": [
+        "\u00a7 242.611"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9965,
+      "citation_accuracy": 1.0,
+      "latency_ms": 24.87
+    },
+    {
+      "case_id": "EVAL-06",
+      "category": "Nasdaq Listing Rules (Rule 5450/5810 Minimum Bid Price)",
+      "query": "A Nasdaq Global Market issuer's closing bid price has remained below $1.00 per share for 30 consecutive business days (currently at $0.72). What compliance period applies and how does the company regain compliance?",
+      "expected_status": "CONDITIONAL_REVIEW",
+      "predicted_status": "CONDITIONAL_REVIEW",
+      "status_correct": true,
+      "expected_citations": [
+        "5450(a)(1)",
+        "5810(c)(3)(A)"
+      ],
+      "retrieved_citations": [
+        "Nasdaq Rule 5450"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9331,
+      "citation_accuracy": 1.0,
+      "latency_ms": 8.37
+    },
+    {
+      "case_id": "EVAL-07",
+      "category": "Nasdaq Accelerated Delisting ($0.10 & Reverse Split Rules)",
+      "query": "During its compliance period, a Nasdaq-listed company's closing bid price falls to $0.10 or less for 10 consecutive trading days after already completing a 250-for-1 reverse stock split last year.",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "5810(c)(3)(A)(iii)",
+        "5810(c)(3)(A)(iv)"
+      ],
+      "retrieved_citations": [
+        "Nasdaq Rule 5450",
+        "Nasdaq Rule 5250"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9312,
+      "citation_accuracy": 1.0,
+      "latency_ms": 5.78
+    },
+    {
+      "case_id": "EVAL-08",
+      "category": "SEC Form 8-K Item 1.05 & Nasdaq MarketWatch (Cybersecurity)",
+      "query": "A Nasdaq-listed company determined a ransomware breach was material on Monday, waited 6 business days for forensics before filing Form 8-K Item 1.05, and released the news at 11:00 a.m. ET without notifying Nasdaq MarketWatch.",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "Item 1.05",
+        "5250(b)(1)",
+        "IM-5250-1"
+      ],
+      "retrieved_citations": [
+        "Form 8-K Item 1.05",
+        "Nasdaq Rule 5250"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9965,
+      "citation_accuracy": 1.0,
+      "latency_ms": 12.45
+    },
+    {
+      "case_id": "EVAL-09",
+      "category": "Nasdaq Market Surveillance & FINRA Algo Supervision",
+      "query": "An algorithmic trader deploys an untested strategy without a kill-switch that enters non-bona-fide layered limit orders on Nasdaq and cancels them within 200ms after executing on the opposite side.",
+      "expected_status": "NON_COMPLIANT",
+      "predicted_status": "NON_COMPLIANT",
+      "status_correct": true,
+      "expected_citations": [
+        "3110",
+        "15-09",
+        "General 9"
+      ],
+      "retrieved_citations": [
+        "FINRA Rule 3110",
+        "17 CFR \u00a7 242.613",
+        "Form 8-K Item 1.05"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9189,
+      "citation_accuracy": 0.9524,
+      "latency_ms": 11.49
+    },
+    {
+      "case_id": "EVAL-10",
+      "category": "FINRA Rule 3310 AML & Rule 5310 Best Execution",
+      "query": "What are the mandatory requirements for filing a FinCEN Suspicious Activity Report (SAR) under FINRA Rule 3310 and how often must a broker-dealer conduct a 'regular and rigorous' best execution review under FINRA Rule 5310?",
+      "expected_status": "INFORMATIONAL",
+      "predicted_status": "INFORMATIONAL",
+      "status_correct": true,
+      "expected_citations": [
+        "3310",
+        "5310",
+        "1023.320"
+      ],
+      "retrieved_citations": [
+        "FINRA Rule 3310",
+        "FINRA Rule 5310"
+      ],
+      "context_recall": 1.0,
+      "context_precision": 1.0,
+      "faithfulness_score": 0.9965,
+      "citation_accuracy": 1.0,
+      "latency_ms": 13.16
+    }
+  ]
+}

@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nasdaq Regulatory Compliance & Policy Agentic RAG Terminal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #060a12;
+      color: #e2e8f0;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid rgba(56, 189, 248, 0.16);
+      backdrop-filter: blur(12px);
+    }
+    .nasdaq-gradient {
+      background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 50%, #38bdf8 100%);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Institutional Header Bar -->
+  <header class="border-b border-slate-800/80 bg-[#080e1a]/95 sticky top-0 z-30">
+    <div class="max-w-[1600px] mx-auto px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-lg nasdaq-gradient flex items-center justify-center shadow-lg shadow-sky-500/20 font-bold text-white text-lg tracking-wider mono">
+          NQ
+        </div>
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-base font-bold tracking-tight text-white">
+              NASDAQ & SEC REGULATORY COMPLIANCE AGENTIC RAG
+            </h1>
+            <span class="px-2 py-0.5 text-[11px] font-semibold rounded bg-sky-500/15 text-sky-400 border border-sky-500/30 mono">
+              LangGraph + Qdrant RRF v1.0
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">
+            Hierarchical Statutory ETL Pipeline &bull; Hybrid Dense + BM25 Lexical Retrieval &bull; 6-Node Self-RAG Compliance Verification
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Telemetry Status Pills -->
+      <div class="flex flex-wrap items-center gap-3 text-xs mono">
+        <div class="px-3 py-1.5 rounded-md bg-slate-900/90 border border-slate-800 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">Qdrant:</span>
+          <span id="hdr-chunks" class="text-sky-400 font-semibold">48 Chunks / 6 Docs</span>
+        </div>
+        <div class="px-3 py-1.5 rounded-md bg-slate-900/90 border border-slate-800 flex items-center gap-2">
+          <span class="text-slate-400">Citations:</span>
+          <span id="hdr-citations" class="text-emerald-400 font-semibold">--</span>
+        </div>
+        <div class="px-3 py-1.5 rounded-md bg-slate-900/90 border border-slate-800 flex items-center gap-2">
+          <span class="text-slate-400">Engine:</span>
+          <span id="hdr-llm" class="text-amber-300 font-semibold">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="max-w-[1600px] mx-auto px-6 flex gap-1 border-t border-slate-800/60 bg-[#060a12]/60">
+      <button onclick="switchTab('console')" id="tab-btn-console" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-sky-400 text-sky-400 transition">
+        1. Agentic Compliance Console (LangGraph)
+      </button>
+      <button onclick="switchTab('hybrid')" id="tab-btn-hybrid" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+        2. Hybrid RRF Lab &amp; Live ETL Ingestion
+      </button>
+      <button onclick="switchTab('corpus')" id="tab-btn-corpus" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+        3. Regulatory AST Corpus Explorer
+      </button>
+      <button onclick="switchTab('eval')" id="tab-btn-eval" class="px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+        4. RAG Evaluation &amp; Benchmark Suite
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace Container -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-6 py-6">
+
+    <!-- ======================================================================= -->
+    <!-- TAB 1: AGENTIC COMPLIANCE CONSOLE                                       -->
+    <!-- ======================================================================= -->
+    <section id="tab-console" class="space-y-6">
+      <!-- Preset Scenarios Bar -->
+      <div class="glass-card rounded-xl p-4">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs font-semibold uppercase tracking-wider text-sky-400 mono">
+            Institutional Market Surveillance &amp; Regulatory Audit Scenarios (One-Click Load)
+          </span>
+          <span class="text-[11px] text-slate-400">
+            Select a real-world SEC / Nasdaq compliance scenario or enter any custom query below
+          </span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <button onclick="loadPreset(0)" class="text-left p-2.5 rounded-lg bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/40 transition group">
+            <div class="text-[11px] font-bold text-rose-400 mono mb-0.5">SEC RULE 15c3-5</div>
+            <div class="text-xs font-medium text-slate-200 group-hover:text-white line-clamp-2">Unfiltered "Naked" Sponsored Access &amp; Post-Trade Credit Checks</div>
+          </button>
+          <button onclick="loadPreset(1)" class="text-left p-2.5 rounded-lg bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/40 transition group">
+            <div class="text-[11px] font-bold text-rose-400 mono mb-0.5">SEC REG SHO 203/204</div>
+            <div class="text-xs font-medium text-slate-200 group-hover:text-white line-clamp-2">Uncovered Short Sale Locate Failure &amp; T+2 Fail-to-Deliver Penalty Box</div>
+          </button>
+          <button onclick="loadPreset(2)" class="text-left p-2.5 rounded-lg bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/40 transition group">
+            <div class="text-[11px] font-bold text-amber-400 mono mb-0.5">NASDAQ RULE 5450/5810</div>
+            <div class="text-xs font-medium text-slate-200 group-hover:text-white line-clamp-2">Sub-$1.00 Bid Price for 30 Business Days &amp; 180-Day Cure Period</div>
+          </button>
+          <button onclick="loadPreset(3)" class="text-left p-2.5 rounded-lg bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/40 transition group">
+            <div class="text-[11px] font-bold text-rose-400 mono mb-0.5">SEC REG NMS RULE 611</div>
+            <div class="text-xs font-medium text-slate-200 group-hover:text-white line-clamp-2">Outbound ISO Order Without Simultaneous Protected Quote Sweep</div>
+          </button>
+          <button onclick="loadPreset(4)" class="text-left p-2.5 rounded-lg bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/40 transition group">
+            <div class="text-[11px] font-bold text-rose-400 mono mb-0.5">8-K ITEM 1.05 &amp; IM-5250-1</div>
+            <div class="text-xs font-medium text-slate-200 group-hover:text-white line-clamp-2">Material Ransomware Breach Delayed 6 Days &amp; Missing MarketWatch Notice</div>
+          </button>
+          <button onclick="loadPreset(5)" class="text-left p-2.5 rounded-lg bg-slate-900/90 hover:bg-slate-800/90 border border-slate-800 hover:border-sky-500/40 transition group">
+            <div class="text-[11px] font-bold text-rose-400 mono mb-0.5">SMARTS &amp; FINRA 3110</div>
+            <div class="text-xs font-medium text-slate-200 group-hover:text-white line-clamp-2">Spoofing/Layering Orders (&lt;200ms Cancel) &amp; Missing Algo Kill-Switch</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Query Input Box -->
+      <div class="glass-card rounded-xl p-5">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5 mono">
+              Regulatory Compliance Query or Trade / Listing Audit Scenario
+            </label>
+            <textarea id="query-input" rows="3" class="w-full rounded-lg bg-slate-950/90 border border-slate-800 focus:border-sky-500 focus:outline-none p-3 text-sm text-slate-100 placeholder-slate-500" placeholder="Enter a regulatory compliance question or market surveillance scenario..."></textarea>
+          </div>
+          <div class="w-full md:w-72 flex flex-col justify-between gap-3">
+            <div class="grid grid-cols-2 gap-2.5">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-400 mb-1 mono">Jurisdiction</label>
+                <select id="jurisdiction-select" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-2 text-xs text-slate-200 mono">
+                  <option value="ALL">ALL (SEC+NASDAQ+FINRA)</option>
+                  <option value="SEC">SEC Only</option>
+                  <option value="NASDAQ">NASDAQ Only</option>
+                  <option value="FINRA_NASDAQ">FINRA / NASDAQ</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-400 mb-1 mono">Top-K Chunks</label>
+                <select id="topk-select" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-2.5 py-2 text-xs text-slate-200 mono">
+                  <option value="6" selected>Top 6 (RRF)</option>
+                  <option value="4">Top 4 (RRF)</option>
+                  <option value="8">Top 8 (RRF)</option>
+                </select>
+              </div>
+            </div>
+            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+              <input type="checkbox" id="self-rag-toggle" checked class="rounded bg-slate-900 border-slate-700 text-sky-500" />
+              <span>Enable Self-RAG Corrective Query Rewriter</span>
+            </label>
+            <button onclick="executeComplianceQuery()" id="run-query-btn" class="w-full py-2.5 px-4 rounded-lg nasdaq-gradient hover:opacity-95 text-white font-semibold text-xs uppercase tracking-wider shadow-lg shadow-sky-500/20 transition flex items-center justify-center gap-2 mono">
+              <span>Run LangGraph Compliance Audit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6-Node LangGraph Execution Trace Bar -->
+      <div class="glass-card rounded-xl p-4">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-sky-400 mono">
+              LangGraph 6-Node State Machine Execution Trace
+            </span>
+            <span id="trace-rewrite-badge" class="hidden px-2 py-0.5 text-[10px] rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 mono">
+              Self-RAG Query Rewriter Triggered
+            </span>
+          </div>
+          <span id="trace-latency" class="text-xs text-slate-400 mono">Total Latency: -- ms</span>
+        </div>
+        <div id="langgraph-trace-grid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2.5">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Main Results Split: Left = Compliance Verdict & Synthesis | Right = Qdrant Hybrid Chunks -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 Columns: Compliance Determination & Hallucination Audit -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="glass-card rounded-xl p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+              <div class="flex items-center gap-3">
+                <span id="verdict-badge" class="px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase mono bg-slate-800 text-slate-200">
+                  AWAITING QUERY
+                </span>
+                <div>
+                  <div class="text-xs text-slate-400 mono">Risk Classification</div>
+                  <div id="risk-badge" class="text-sm font-bold text-slate-200 mono">--</div>
+                </div>
+              </div>
+
+              <!-- Grounding & Guardrail Scores -->
+              <div class="flex items-center gap-4 text-right mono">
+                <div>
+                  <div class="text-[10px] text-slate-400 uppercase">Faithfulness</div>
+                  <div id="metric-faithfulness" class="text-sm font-bold text-emerald-400">--%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-slate-400 uppercase">Citation Precision</div>
+                  <div id="metric-citation-prec" class="text-sm font-bold text-sky-400">--%</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-slate-400 uppercase">Evidence Score</div>
+                  <div id="metric-sufficiency" class="text-sm font-bold text-amber-300">--%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Summary -->
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-400 mono mb-1.5">
+                Executive Regulatory Determination
+              </h3>
+              <p id="exec-summary" class="text-sm text-slate-100 leading-relaxed bg-slate-950/70 p-3.5 rounded-lg border border-slate-800/90">
+                Select a preset scenario above or run a custom compliance query to generate a citation-verified audit determination.
+              </p>
+            </div>
+
+            <!-- Applicable Statutory Rules Pills -->
+            <div>
+              <h4 class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mono mb-1.5">
+                Applicable Statutory Citations Verified in Qdrant
+              </h4>
+              <div id="applicable-rules-list" class="flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <!-- Violated / Triggered Clauses & Remediation -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-rose-950/20 border border-rose-500/25 rounded-lg p-3.5">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-rose-400 mono mb-2">
+                  Triggered / Violated Statutory Clauses
+                </h4>
+                <ul id="triggered-clauses-list" class="space-y-1.5 text-xs text-slate-200 list-disc list-inside"></ul>
+              </div>
+              <div class="bg-emerald-950/20 border border-emerald-500/25 rounded-lg p-3.5">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mono mb-2">
+                  Mandatory Engineering &amp; Supervisory Remediation
+                </h4>
+                <ul id="remediation-list" class="space-y-1.5 text-xs text-slate-200 list-disc list-inside"></ul>
+              </div>
+            </div>
+
+            <!-- Detailed Statutory Analysis -->
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-400 mono mb-2">
+                Detailed Statutory Analysis &amp; Clause Grounding
+              </h3>
+              <div id="detailed-analysis" class="text-xs text-slate-300 leading-relaxed space-y-2.5 bg-slate-950/80 p-4 rounded-lg border border-slate-800 whitespace-pre-wrap font-sans"></div>
+            </div>
+          </div>
+
+          <!-- Hallucination Auditor Citation Table -->
+          <div class="glass-card rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-400 mono">
+                Node 6: Deterministic Hallucination Auditor — Statutory Citation Verification Log
+              </h3>
+              <span class="text-[11px] text-slate-400 mono">Every cited rule is cross-checked against Qdrant payloads</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr class="border-b border-slate-800 text-slate-400 mono text-[11px]">
+                    <th class="py-2 px-2.5">Extracted Citation</th>
+                    <th class="py-2 px-2.5">Grounding Status</th>
+                    <th class="py-2 px-2.5">Source Chunk ID</th>
+                    <th class="py-2 px-2.5">Statutory Excerpt</th>
+                  </tr>
+                </thead>
+                <tbody id="citation-audit-tbody" class="divide-y divide-slate-800/60"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 5 Columns: Retrieved Qdrant Chunks & Hybrid RRF Breakdown -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="glass-card rounded-xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-sky-400 mono">
+                Qdrant Hybrid Retrieval Context (Dense + BM25 + Citation RRF)
+              </h3>
+              <span id="retrieved-count-badge" class="text-[11px] text-slate-400 mono">0 chunks</span>
+            </div>
+            <div id="retrieved-chunks-container" class="space-y-3 max-h-[880px] overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 2: HYBRID RRF RETRIEVAL LAB & LIVE ETL INGESTION                    -->
+    <!-- ======================================================================= -->
+    <section id="tab-hybrid" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 cols: Side-by-Side Modality Comparison -->
+        <div class="lg:col-span-7 glass-card rounded-xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-sm font-bold text-white uppercase tracking-wider mono">
+                Hybrid RRF vs. Dense Semantic vs. Sparse BM25 Comparison
+              </h2>
+              <p class="text-xs text-slate-400">
+                Demonstrates why Reciprocal Rank Fusion ($\text{RRF}_k=60$) combining Dense Vectors + Okapi BM25 + Exact Citation Boost is critical for financial regulations.
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-2.5">
+            <input id="compare-query-input" type="text" value="Rule 15c3-5(c)(1)(ii) erroneous order price collar and Rule 204(a) T+2 close-out" class="flex-1 rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-slate-100 mono" />
+            <button onclick="runModalityComparison()" class="px-4 py-2 rounded-lg nasdaq-gradient text-white text-xs font-semibold mono">
+              Compare Rankings
+            </button>
+          </div>
+          <div id="modality-comparison-grid" class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2"></div>
+        </div>
+
+        <!-- Right 5 cols: Live Regulatory Document ETL Ingestion -->
+        <div class="lg:col-span-5 glass-card rounded-xl p-5 space-y-4">
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider mono">
+              Live Data Engineering ETL Pipeline — Ingest Custom Regulation
+            </h2>
+            <p class="text-xs text-slate-400">
+              Upload or paste a regulatory rulebook section with YAML frontmatter. The pipeline parses the AST hierarchy, extracts citations/thresholds, computes SHA-256 hashes, and upserts to Qdrant.
+            </p>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1 mono">Document Filename</label>
+            <input id="ingest-filename" type="text" value="nasdaq_options_market_rule_chapter_vii.md" class="w-full rounded-lg bg-slate-950 border border-slate-800 px-3 py-1.5 text-xs text-slate-200 mono" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1 mono">Regulatory Markdown with YAML Frontmatter</label>
+            <textarea id="ingest-markdown" rows="11" class="w-full rounded-lg bg-slate-950 border border-slate-800 p-3 text-xs text-slate-200 mono">---
+doc_id: "NASDAQ-NOM-CH7"
+title: "Nasdaq Options Market (NOM) Options 3, Section 15: Risk Protections & Market Maker Quoting"
+jurisdiction: "NASDAQ"
+citation_prefix: "NOM Options 3, Section 15"
+effective_date: "2024-01-15"
+last_amended: "2025-02-01"
+category: "Options Market Risk Controls"
+---
+
+# Nasdaq Options Market (NOM) — Options 3, Section 15 Risk Protections
+
+## NOM Options 3, Section 15(a) Market-Wide Risk Protection
+All Nasdaq Options Market Participants must configure mandatory order entry and execution rate thresholds.
+
+### Section 15(a)(1) Acceptable Trade Range (ATR) and Rapid Fire Risk Control
+When the number of contracts executed by a Market Maker across an options series exceeds the pre-set Rapid Fire threshold within a 1-second rolling window (default 5 seconds lock-out), NOM automatically cancels all resting quotes in that options class pursuant to `NOM Options 3, Section 15(a)(1)` and `17 CFR § 240.15c3-5(c)(1)(ii)`.</textarea>
+          </div>
+          <button onclick="ingestCustomPolicy()" class="w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs uppercase tracking-wider transition mono">
+            Execute ETL Chunking &amp; Upsert to Qdrant
+          </button>
+          <div id="ingest-result-box" class="hidden p-3 rounded-lg bg-slate-950 border border-emerald-500/40 text-xs mono text-emerald-300"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 3: REGULATORY AST CORPUS EXPLORER                                   -->
+    <!-- ======================================================================= -->
+    <section id="tab-corpus" class="hidden space-y-5">
+      <div class="glass-card rounded-xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider mono">
+              Indexed Regulatory Corpus &amp; Hierarchical AST Chunks
+            </h2>
+            <p class="text-xs text-slate-400">
+              Inspect how the Data Engineering pipeline preserves statutory breadcrumbs, obligation classifications, numeric thresholds, and SHA-256 content hashes.
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="corpus-doc-filter" onchange="loadCorpusExplorer()" class="rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 text-xs text-slate-200 mono">
+              <option value="">All Regulatory Documents</option>
+            </select>
+          </div>
+        </div>
+        <div id="corpus-chunks-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 4: RAG EVALUATION & BENCHMARK SUITE                                 -->
+    <!-- ======================================================================= -->
+    <section id="tab-eval" class="hidden space-y-6">
+      <div class="glass-card rounded-xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+          <div>
+            <h2 class="text-sm font-bold text-white uppercase tracking-wider mono">
+              RAGAS-Style Golden Regulatory Compliance Evaluation Suite (10 Scenarios)
+            </h2>
+            <p class="text-xs text-slate-400">
+              Automated quantitative evaluation of Context Recall, Context Precision, Answer Faithfulness, Statutory Citation Precision, and Verdict Accuracy.
+            </p>
+          </div>
+          <button onclick="runLiveEvaluation()" id="run-eval-btn" class="px-4 py-2 rounded-lg nasdaq-gradient text-white text-xs font-semibold uppercase tracking-wider mono">
+            Re-Run Live 10-Case Benchmark
+          </button>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6 mono">
+          <div class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase">Context Recall</div>
+            <div id="eval-recall" class="text-xl font-bold text-emerald-400 mt-1">--%</div>
+          </div>
+          <div class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase">Context Precision</div>
+            <div id="eval-precision" class="text-xl font-bold text-sky-400 mt-1">--%</div>
+          </div>
+          <div class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase">Faithfulness</div>
+            <div id="eval-faithfulness" class="text-xl font-bold text-emerald-400 mt-1">--%</div>
+          </div>
+          <div class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase">Citation Precision</div>
+            <div id="eval-cit-acc" class="text-xl font-bold text-sky-400 mt-1">--%</div>
+          </div>
+          <div class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase">Verdict Accuracy</div>
+            <div id="eval-verdict-acc" class="text-xl font-bold text-amber-300 mt-1">--%</div>
+          </div>
+          <div class="p-3.5 rounded-lg bg-slate-950/90 border border-slate-800">
+            <div class="text-[10px] text-slate-400 uppercase">P50 / P95 Latency</div>
+            <div id="eval-latency" class="text-sm font-bold text-slate-200 mt-2">-- / -- ms</div>
+          </div>
+        </div>
+
+        <!-- Benchmark Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 mono text-[11px]">
+                <th class="py-2.5 px-3">Case ID</th>
+                <th class="py-2.5 px-3">Regulatory Domain</th>
+                <th class="py-2.5 px-3">Expected</th>
+                <th class="py-2.5 px-3">Predicted</th>
+                <th class="py-2.5 px-3">Recall</th>
+                <th class="py-2.5 px-3">Precision</th>
+                <th class="py-2.5 px-3">Faithfulness</th>
+                <th class="py-2.5 px-3">Citation Acc</th>
+                <th class="py-2.5 px-3">Latency</th>
+              </tr>
+            </thead>
+            <tbody id="eval-cases-tbody" class="divide-y divide-slate-800/60"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const PRESET_QUERIES = [
+      "A quantitative hedge fund routes orders directly to Nasdaq using our broker-dealer MPID via unfiltered sponsored access where credit thresholds are checked post-trade at end-of-day, and the client can modify its own fat-finger price collars. Is this compliant with SEC Rule 15c3-5?",
+      "Our proprietary trading desk executed a speculative short sale in an equity security without obtaining a pre-trade locate and failed to close out the resulting fail-to-deliver position past T+2. Which SEC Regulation SHO rules are violated and what restrictions apply?",
+      "A Nasdaq Global Market listed company's closing bid price has remained below $1.00 per share for 30 consecutive business days (currently at $0.68). What compliance period applies under Nasdaq Rule 5450 and Rule 5810, and what happens if the stock falls to $0.10 for 10 trading days?",
+      "Our Smart Order Router marked a limit buy order as an Intermarket Sweep Order (ISO) and executed on Nasdaq without routing simultaneous sweep orders to execute against a superior Protected Offer displayed on another national exchange. Evaluate compliance under Reg NMS Rule 611.",
+      "A Nasdaq-listed issuer determined on Monday that a ransomware attack was material, waited 6 business days for forensic completion before filing Form 8-K Item 1.05, and issued a press release at 11:30 a.m. ET without prior notice to Nasdaq MarketWatch. Audit this disclosure.",
+      "An algorithmic trader deployed a modified order-routing strategy to production on Nasdaq without a kill-switch or sandbox sign-off that submits layered non-bona-fide limit orders and cancels them within 180 milliseconds of opposite-side executions. Audit under Nasdaq and FINRA rules."
+    ];
+
+    function switchTab(tabName) {
+      ['console', 'hybrid', 'corpus', 'eval'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tabName);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === tabName) {
+          btn.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-sky-400 text-sky-400 transition";
+        } else {
+          btn.className = "px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition";
+        }
+      });
+      if (tabName === 'hybrid') runModalityComparison();
+      if (tabName === 'corpus') loadCorpusExplorer();
+      if (tabName === 'eval') loadEvalSummary();
+    }
+
+    function loadPreset(idx) {
+      document.getElementById('query-input').value = PRESET_QUERIES[idx];
+      executeComplianceQuery();
+    }
+
+    async function fetchHealth() {
+      try {
+        const res = await fetch('/api/v1/health');
+        const data = await res.json();
+        const etl = data.etl_telemetry;
+        document.getElementById('hdr-chunks').textContent = `${etl.total_chunks_created} Chunks / ${etl.documents_processed} Docs`;
+        document.getElementById('hdr-citations').textContent = `${etl.unique_citations_indexed} Rules (${etl.cross_reference_edges} Edges)`;
+        document.getElementById('hdr-llm').textContent = data.llm_backend;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function statusBadgeStyle(status) {
+      if (status === 'NON_COMPLIANT') return 'bg-rose-500/20 text-rose-300 border border-rose-500/40';
+      if (status === 'COMPLIANT') return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+      if (status === 'CONDITIONAL_REVIEW') return 'bg-amber-500/20 text-amber-300 border border-amber-500/40';
+      return 'bg-sky-500/20 text-sky-300 border border-sky-500/40';
+    }
+
+    async function executeComplianceQuery() {
+      const query = document.getElementById('query-input').value.trim();
+      if (!query) return;
+      const btn = document.getElementById('run-query-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>Executing 6-Node LangGraph...</span>';
+
+      try {
+        const payload = {
+          query: query,
+          jurisdiction_filter: document.getElementById('jurisdiction-select').value,
+          top_k: parseInt(document.getElementById('topk-select').value, 10),
+          enable_self_rag_rewrite: document.getElementById('self-rag-toggle').checked
+        };
+
+        const res = await fetch('/api/v1/compliance/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        renderComplianceResponse(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Run LangGraph Compliance Audit</span>';
+      }
+    }
+
+    function renderComplianceResponse(data) {
+      const status = data.compliance_status || data.Compliance_status || 'INFORMATIONAL';
+      const vb = document.getElementById('verdict-badge');
+      vb.textContent = status.replace('_', ' ');
+      vb.className = `px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wider uppercase mono ${statusBadgeStyle(status)}`;
+
+      document.getElementById('risk-badge').textContent = `${data.risk_level} (${data.query_intent})`;
+      document.getElementById('metric-faithfulness').textContent = `${(data.faithfulness_score * 100).toFixed(1)}%`;
+      document.getElementById('metric-citation-prec').textContent = `${(data.citation_precision * 100).toFixed(1)}%`;
+      document.getElementById('metric-sufficiency').textContent = `${(data.evidence_sufficiency_score * 100).toFixed(1)}%`;
+      document.getElementById('trace-latency').textContent = `Total Pipeline Latency: ${data.total_latency_ms.toFixed(1)} ms`;
+
+      const rwBadge = document.getElementById('trace-rewrite-badge');
+      rwBadge.classList.toggle('hidden', !data.query_rewritten);
+
+      // Render LangGraph Trace Nodes
+      const traceGrid = document.getElementById('langgraph-trace-grid');
+      traceGrid.innerHTML = (data.agent_trace || []).map(node => `
+        <div class="p-2.5 rounded-lg bg-slate-950/90 border border-slate-800/90 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <span class="text-[11px] font-bold text-sky-400 mono">${node.node_name}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 mono">${node.duration_ms.toFixed(1)}ms</span>
+            </div>
+            <p class="text-[11px] text-slate-300 leading-snug">${node.summary}</p>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('exec-summary').textContent = data.executive_summary;
+
+      document.getElementById('applicable-rules-list').innerHTML = (data.applicable_rules || []).map(r => `
+        <span class="px-2.5 py-1 rounded bg-sky-500/15 border border-sky-500/30 text-sky-300 text-xs mono font-medium">${r}</span>
+      `).join('');
+
+      document.getElementById('triggered-clauses-list').innerHTML = (data.violated_or_triggered_clauses || []).map(c => `
+        <li>${c}</li>
+      `).join('');
+
+      document.getElementById('remediation-list').innerHTML = (data.remediation_actions || []).map(r => `
+        <li>${r}</li>
+      `).join('');
+
+      document.getElementById('detailed-analysis').textContent = data.regulatory_analysis;
+
+      // Render Hallucination Audit Table
+      const auditBody = document.getElementById('citation-audit-tbody');
+      auditBody.innerHTML = (data.citation_audit || []).map(item => `
+        <tr>
+          <td class="py-2 px-2.5 font-semibold text-sky-300 mono">${item.citation}</td>
+          <td class="py-2 px-2.5">
+            ${item.verified_in_corpus
+              ? '<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] mono font-semibold">VERIFIED IN QDRANT</span>'
+              : '<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] mono font-semibold">UNVERIFIED</span>'}
+          </td>
+          <td class="py-2 px-2.5 text-slate-300 mono">${item.source_chunk_id || '--'}</td>
+          <td class="py-2 px-2.5 text-slate-400 truncate max-w-xs">${item.matching_excerpt || '--'}</td>
+        </tr>
+      `).join('');
+
+      // Render Retrieved Qdrant Chunks
+      const chunks = data.retrieved_chunks || [];
+      document.getElementById('retrieved-count-badge').textContent = `${chunks.length} chunks retrieved`;
+      document.getElementById('retrieved-chunks-container').innerHTML = chunks.map((ch, idx) => `
+        <div class="p-3.5 rounded-lg bg-slate-950/90 border ${ch.is_cross_ref_expanded ? 'border-purple-500/40' : 'border-slate-800'} space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-[11px] font-bold mono">#${idx + 1} ${ch.primary_citation}</span>
+              <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] mono">${ch.jurisdiction}</span>
+              ${ch.is_cross_ref_expanded ? '<span class="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[10px] mono">Cross-Ref Graph</span>' : ''}
+            </div>
+            <span class="text-xs font-bold text-emerald-400 mono">RRF: ${ch.rrf_score.toFixed(3)}</span>
+          </div>
+          <div class="text-[11px] text-slate-400 mono">${ch.breadcrumb}</div>
+          <div class="grid grid-cols-3 gap-1.5 text-[10px] mono bg-slate-900/90 p-2 rounded border border-slate-800/80">
+            <div>Dense Cosine: <span class="text-sky-300 font-semibold">${ch.dense_score.toFixed(3)}</span></div>
+            <div>Sparse BM25: <span class="text-amber-300 font-semibold">${ch.sparse_bm25_score.toFixed(3)}</span></div>
+            <div>Citation Boost: <span class="text-emerald-300 font-semibold">${ch.citation_match_boost.toFixed(2)}</span></div>
+          </div>
+          ${ch.numeric_thresholds && ch.numeric_thresholds.length ? `
+            <div class="flex flex-wrap gap-1">
+              ${ch.numeric_thresholds.slice(0, 6).map(t => `<span class="px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[10px] mono">${t}</span>`).join('')}
+            </div>
+          ` : ''}
+          <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${ch.text}</p>
+        </div>
+      `).join('');
+    }
+
+    async function runModalityComparison() {
+      const q = document.getElementById('compare-query-input').value.trim();
+      if (!q) return;
+      const res = await fetch('/api/v1/retrieval/compare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q, top_k: 4, jurisdiction_filter: 'ALL' })
+      });
+      const data = await res.json();
+      const cols = [
+        { title: 'Hybrid RRF + Citation Boost', key: 'hybrid_rrf_ranking', scoreField: 'rrf_score', color: 'text-emerald-400' },
+        { title: 'Dense Vector Only (Cosine)', key: 'dense_only_ranking', scoreField: 'dense_score', color: 'text-sky-400' },
+        { title: 'Sparse Lexical Only (BM25)', key: 'sparse_bm25_ranking', scoreField: 'sparse_bm25_score', color: 'text-amber-400' }
+      ];
+      document.getElementById('modality-comparison-grid').innerHTML = cols.map(col => `
+        <div class="p-3 rounded-lg bg-slate-950/90 border border-slate-800 space-y-2.5">
+          <div class="text-xs font-bold ${col.color} mono border-b border-slate-800 pb-1.5">${col.title}</div>
+          ${(data[col.key] || []).map((h, i) => `
+            <div class="p-2.5 rounded bg-slate-900/90 border border-slate-800/80 space-y-1">
+              <div class="flex items-center justify-between text-[11px] mono">
+                <span class="font-bold text-slate-200">#${i+1} ${h.primary_citation}</span>
+                <span class="${col.color} font-semibold">${h[col.scoreField].toFixed(3)}</span>
+              </div>
+              <div class="text-[10px] text-slate-400 mono truncate">${h.chunk_id} (${h.jurisdiction})</div>
+              <div class="text-[11px] text-slate-300 line-clamp-2">${h.text}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    async function ingestCustomPolicy() {
+      const filename = document.getElementById('ingest-filename').value.trim();
+      const markdown_content = document.getElementById('ingest-markdown').value;
+      const box = document.getElementById('ingest-result-box');
+      box.classList.remove('hidden');
+      box.textContent = 'Running AST Chunker & Qdrant Upsert...';
+
+      const res = await fetch('/api/v1/pipeline/ingest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename, markdown_content })
+      });
+      const report = await res.json();
+      box.innerHTML = `ETL Upsert Complete in ${report.elapsed_ms}ms! Indexed Documents: ${report.documents_processed} | Total Qdrant Chunks: ${report.total_chunks_created} | Unique Citations: ${report.unique_citations_indexed}`;
+      fetchHealth();
+    }
+
+    async function loadCorpusExplorer() {
+      const docFilter = document.getElementById('corpus-doc-filter').value;
+      const url = docFilter ? `/api/v1/corpus/documents?doc_id=${encodeURIComponent(docFilter)}` : '/api/v1/corpus/documents';
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const sel = document.getElementById('corpus-doc-filter');
+      if (sel.options.length <= 1) {
+        (data.documents || []).forEach(d => {
+          const opt = document.createElement('option');
+          opt.value = d.doc_id;
+          opt.textContent = `${d.doc_id} — ${d.title}`;
+          sel.appendChild(opt);
+        });
+      }
+
+      document.getElementById('corpus-chunks-grid').innerHTML = (data.chunks || []).map(ch => `
+        <div class="p-4 rounded-lg bg-slate-950/90 border border-slate-800 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 text-xs font-bold mono">${ch.chunk_id} &bull; ${ch.primary_citation}</span>
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-amber-300 text-[10px] mono">${ch.obligation_type}</span>
+          </div>
+          <div class="text-[11px] text-slate-400 mono">${ch.breadcrumb}</div>
+          <div class="text-[10px] text-slate-500 mono">SHA-256: ${ch.content_hash.slice(0, 24)}... | UUID: ${ch.chunk_uuid}</div>
+          <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${ch.text}</p>
+        </div>
+      `).join('');
+    }
+
+    async function loadEvalSummary() {
+      const res = await fetch('/api/v1/eval/latest');
+      const data = await res.json();
+      renderEvalSummary(data);
+    }
+
+    async function runLiveEvaluation() {
+      const btn = document.getElementById('run-eval-btn');
+      btn.disabled = true;
+      btn.textContent = 'Running 10 Benchmark Scenarios...';
+      try {
+        const res = await fetch('/api/v1/eval/run', { method: 'POST' });
+        const data = await res.json();
+        renderEvalSummary(data);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Re-Run Live 10-Case Benchmark';
+      }
+    }
+
+    function renderEvalSummary(data) {
+      document.getElementById('eval-recall').textContent = `${(data.mean_context_recall * 100).toFixed(1)}%`;
+      document.getElementById('eval-precision').textContent = `${(data.mean_context_precision * 100).toFixed(1)}%`;
+      document.getElementById('eval-faithfulness').textContent = `${(data.mean_faithfulness * 100).toFixed(1)}%`;
+      document.getElementById('eval-cit-acc').textContent = `${(data.mean_citation_accuracy * 100).toFixed(1)}%`;
+      document.getElementById('eval-verdict-acc').textContent = `${(data.verdict_accuracy * 100).toFixed(1)}%`;
+      document.getElementById('eval-latency').textContent = `${data.p50_latency_ms.toFixed(1)} / ${data.p95_latency_ms.toFixed(1)} ms`;
+
+      document.getElementById('eval-cases-tbody').innerHTML = (data.case_results || []).map(c => `
+        <tr>
+          <td class="py-2.5 px-3 font-bold text-sky-400 mono">${c.case_id}</td>
+          <td class="py-2.5 px-3 text-slate-200">${c.category}</td>
+          <td class="py-2.5 px-3 mono text-[11px]">${c.expected_status}</td>
+          <td class="py-2.5 px-3 mono text-[11px]">
+            <span class="px-2 py-0.5 rounded ${c.status_correct ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}">${c.predicted_status}</span>
+          </td>
+          <td class="py-2.5 px-3 mono text-emerald-400 font-semibold">${(c.context_recall * 100).toFixed(0)}%</td>
+          <td class="py-2.5 px-3 mono text-sky-400 font-semibold">${(c.context_precision * 100).toFixed(0)}%</td>
+          <td class="py-2.5 px-3 mono text-emerald-300">${(c.faithfulness_score * 100).toFixed(0)}%</td>
+          <td class="py-2.5 px-3 mono text-sky-300">${(c.citation_accuracy * 100).toFixed(0)}%</td>
+          <td class="py-2.5 px-3 mono text-slate-400">${c.latency_ms.toFixed(1)} ms</td>
+        </tr>
+      `).join('');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchHealth();
+      loadPreset(0);
+    });
+  </script>
+</body>
+</html>
