@@ -263,8 +263,3 @@ curl -X POST "http://127.0.0.1:8000/api/v1/compliance/query" \
   }'
 ```
 
----
-
-## License
-
-Released under the **MIT License**. Built for institutional financial technology, regulatory engineering, and capital markets AI research.
