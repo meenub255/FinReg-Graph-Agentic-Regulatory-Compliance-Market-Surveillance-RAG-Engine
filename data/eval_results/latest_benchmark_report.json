@@ -5,8 +5,8 @@
   "mean_faithfulness": 0.9675,
   "mean_citation_accuracy": 0.9905,
   "verdict_accuracy": 1.0,
-  "p50_latency_ms": 12.1,
-  "p95_latency_ms": 19.97,
+  "p50_latency_ms": 22.23,
+  "p95_latency_ms": 38.14,
   "llm_backend": "Deterministic Institutional Regulatory Engine (Offline Ready)",
   "qdrant_collection": "nasdaq_sec_regulatory_corpus",
   "case_results": [
@@ -30,7 +30,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9965,
       "citation_accuracy": 1.0,
-      "latency_ms": 12.22
+      "latency_ms": 28.45
     },
     {
       "case_id": "EVAL-02",
@@ -52,7 +52,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9965,
       "citation_accuracy": 1.0,
-      "latency_ms": 11.98
+      "latency_ms": 23.55
     },
     {
       "case_id": "EVAL-03",
@@ -74,7 +74,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9437,
       "citation_accuracy": 1.0,
-      "latency_ms": 10.17
+      "latency_ms": 14.27
     },
     {
       "case_id": "EVAL-04",
@@ -95,7 +95,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9656,
       "citation_accuracy": 0.9524,
-      "latency_ms": 13.98
+      "latency_ms": 18.53
     },
     {
       "case_id": "EVAL-05",
@@ -115,7 +115,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9965,
       "citation_accuracy": 1.0,
-      "latency_ms": 24.87
+      "latency_ms": 46.06
     },
     {
       "case_id": "EVAL-06",
@@ -135,7 +135,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9331,
       "citation_accuracy": 1.0,
-      "latency_ms": 8.37
+      "latency_ms": 17.55
     },
     {
       "case_id": "EVAL-07",
@@ -156,7 +156,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9312,
       "citation_accuracy": 1.0,
-      "latency_ms": 5.78
+      "latency_ms": 14.28
     },
     {
       "case_id": "EVAL-08",
@@ -178,7 +178,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9965,
       "citation_accuracy": 1.0,
-      "latency_ms": 12.45
+      "latency_ms": 24.25
     },
     {
       "case_id": "EVAL-09",
@@ -201,7 +201,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9189,
       "citation_accuracy": 0.9524,
-      "latency_ms": 11.49
+      "latency_ms": 23.39
     },
     {
       "case_id": "EVAL-10",
@@ -223,7 +223,7 @@
       "context_precision": 1.0,
       "faithfulness_score": 0.9965,
       "citation_accuracy": 1.0,
-      "latency_ms": 13.16
+      "latency_ms": 21.07
     }
   ]
 }

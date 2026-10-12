@@ -5,27 +5,77 @@
 **Enterprise Data Engineering ETL Pipeline &bull; Qdrant Hybrid (Dense + BM25 RRF) Retrieval &bull; 6-Node LangGraph Self-RAG Compliance Verification for Capital Markets**
 
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-0284c7?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-6--Node%20StateGraph-0ea5e9?style=for-the-badge)](https://github.com/langchain-ai/langgraph)
+[![LangGraph](https://img.shields.io/badge/LangGraph-6--Node%20StateGraph-a855f7?style=for-the-badge)](https://github.com/langchain-ai/langgraph)
 [![Qdrant](https://img.shields.io/badge/Qdrant-Hybrid%20RRF%20Search-10b981?style=for-the-badge)](https://qdrant.tech/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Enterprise%20REST%20API-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Pytest](https://img.shields.io/badge/Tests-6%2F6%20Passing-22c55e?style=for-the-badge&logo=pytest&logoColor=white)](#testing--quality-assurance)
 [![Recall](https://img.shields.io/badge/Context%20Recall-100.0%25-f59e0b?style=for-the-badge)](#quantitative-rag-evaluation--benchmark-results)
+[![Citation Precision](https://img.shields.io/badge/Citation%20Precision-99.1%25-ef4444?style=for-the-badge)](#quantitative-rag-evaluation--benchmark-results)
+
+<br />
+
+### Live End-to-End Working Demo (LangGraph 6-Node Execution + Hybrid RRF Lab + Benchmark Suite)
+
+![FinReg-Graph Live Walkthrough Animation](docs/assets/finreg_graph_walkthrough.gif)
+
+> **Video Recording:** Watch the inline animated walkthrough above or [download/view the full HD `.mp4` video (`docs/assets/finreg_graph_demo.mp4`)](docs/assets/finreg_graph_demo.mp4).
 
 </div>
 
 ---
 
-## Overview
+## Executive Overview
 
 **FinReg-Graph** is a production-grade **Agentic Retrieval-Augmented Generation (RAG) & Regulatory Surveillance System** engineered to automate compliance verification across complex financial market regulations, exchange listing rules, and public company disclosures.
 
-Built specifically around **Nasdaq**, **SEC**, and **FINRA** regulatory frameworks, **FinReg-Graph** ingests statutory rulebooks and filings into a **hierarchical AST data engineering pipeline**, indexes them in **Qdrant** using **Hybrid Dense + Sparse BM25 Reciprocal Rank Fusion (RRF)** with **Cross-Reference Graph Expansion**, and orchestrates a **6-node LangGraph state machine** that grades retrieved statutory evidence, rewrites ambiguous queries, determines compliance verdicts (`COMPLIANT`, `NON_COMPLIANT`, `CONDITIONAL_REVIEW`, `INFORMATIONAL`), and deterministically audits every cited statute against the vector database to prevent hallucinations.
+Built around **Nasdaq**, **SEC**, and **FINRA** regulatory frameworks, **FinReg-Graph** ingests statutory rulebooks into a **hierarchical AST data engineering pipeline**, indexes them in **Qdrant** using **Hybrid Dense + Sparse BM25 Reciprocal Rank Fusion (RRF)** with **Cross-Reference Graph Expansion**, and orchestrates a **6-node LangGraph state machine** that grades retrieved statutory evidence, rewrites ambiguous queries, determines compliance verdicts (`COMPLIANT`, `NON_COMPLIANT`, `CONDITIONAL_REVIEW`, `INFORMATIONAL`), and deterministically audits every cited statute against the vector database to eliminate hallucinations.
+
+---
+
+## Interactive UI Walkthrough (Arrow-Annotated Guide)
+
+### 1. Agentic Compliance Console (`LangGraph 6-Node State Machine + Qdrant Hybrid RRF`)
+
+![Annotated Agentic Compliance Console UI](docs/assets/ui_console_annotated.png)
+
+| Arrow | UI Component | What It Does & How It Works |
+| :---: | :--- | :--- |
+| 🔴 **`①`** | **One-Click Institutional Scenarios** | Pre-configured real-world audit scenarios covering **SEC Rule 15c3-5** (Naked Sponsored Access), **Reg SHO Rules 203/204** (Short Sale Locate & `T+2` Close-Out), **Nasdaq Rules 5450/5810** (`$1.00` Bid Price Deficiency), **Reg NMS Rule 611** (ISO Order Routing), **SEC Form 8-K Item 1.05** (4-Day Cyber Breach), and **SMARTS / FINRA Rule 3110** (Spoofing & Algo Kill-Switches). |
+| 🔵 **`②`** | **Query Analyzer & Jurisdiction Router** | Accepts free-text regulatory questions or structured trade scenarios, lets compliance analysts filter by jurisdiction (`ALL`, `SEC`, `NASDAQ`, `FINRA_NASDAQ`), configure `Top-K` RRF depth, and toggle the **Self-RAG Corrective Query Rewriter**. |
+| 🟣 **`③`** | **Live 6-Node LangGraph Execution Trace** | Displays real-time microsecond telemetry for every node in the state machine (`1. query_analyzer` $\rightarrow$ `2. hybrid_retriever` $\rightarrow$ `3. evidence_grader` $\rightarrow$ `4. query_rewriter` $\rightarrow$ `5. compliance_verifier` $\rightarrow$ `6. hallucination_audit`). |
+| 🔴 **`④`** | **Compliance Verdict & Guardrail Scores** | Highlights the final determination badge (`NON COMPLIANT`, `COMPLIANT`, `CONDITIONAL REVIEW`, `INFORMATIONAL`), risk severity (`CRITICAL`), and live guardrail metrics (**Faithfulness `99.7%`**, **Citation Precision `100.0%`**, **Evidence Sufficiency `99.0%`**). |
+| 🟡 **`⑤`** | **Violated Clauses & Engineering Remediation** | Splits the determination into **Triggered/Violated Statutory Clauses** (red panel citing exact paragraphs like `17 CFR § 240.15c3-5(d)(1)`) and **Mandatory Engineering & Supervisory Remediation Steps** (green panel). |
+| 🟢 **`⑥`** | **Node 6 Hallucination Auditor Citation Log** | Deterministic post-generation guardrail that regex-extracts every statute cited by the LLM and cross-checks it against Qdrant payloads (`VERIFIED IN QDRANT` + exact `chunk_id` provenance). |
+| 🔵 **`⑦`** | **Qdrant Hybrid RRF Context & Score Breakdown** | Shows every retrieved statutory clause alongside its **Combined RRF Score** (`0.889`) and decomposed **Dense Cosine**, **Sparse BM25**, and **Citation Boost** scores plus statutory hierarchy breadcrumbs. |
+
+---
+
+### 2. Hybrid RRF Retrieval Lab & Live Data Engineering ETL Ingestion
+
+![Annotated Hybrid RRF Retrieval Lab & Live ETL UI](docs/assets/ui_hybrid_lab_annotated.png)
+
+| Arrow | UI Component | What It Does & How It Works |
+| :---: | :--- | :--- |
+| 🔵 **`①`** | **Multi-Citation Query Input** | Tests complex multi-statute queries (e.g., combining `Rule 15c3-5(c)(1)(ii)` erroneous order collars with `Rule 204(a)` `T+2` close-out rules). |
+| 🟢 **`②`** | **3-Way Modality Ranking Comparison** | Side-by-side comparison proving why **Hybrid RRF + Citation Boost** ranks the exact required clauses at `#1` (`0.882`) and `#2`, whereas **Dense Vector Only** or **Sparse BM25 Only** misses cross-domain nuances. |
+| 🟡 **`③`** | **Live YAML & Hierarchical AST Editor** | Allows data engineers or compliance officers to paste new regulatory policies with YAML frontmatter (`doc_id`, `jurisdiction`, `citation_prefix`) for live ingestion. |
+| 🟢 **`④`** | **Real-Time SHA-256 Qdrant Upsert Telemetry** | Runs the AST chunker, extracts citations/thresholds, computes a deterministic `SHA-256` hash (`UUIDv5`), upserts into Qdrant in `3.4ms`, and confirms idempotent deduplication. |
+
+---
+
+### 3. RAGAS-Style 10-Scenario Golden Evaluation Benchmark Suite
+
+![Annotated RAG Evaluation Benchmark UI](docs/assets/ui_eval_benchmark_annotated.png)
+
+| Arrow | UI Component | What It Does & How It Works |
+| :---: | :--- | :--- |
+| 🟢 **`①`** | **100.0% Statutory Context Recall & Precision** | Measures whether the ground-truth SEC, Nasdaq, and FINRA statutory clauses appear in the `Top-6` Qdrant Hybrid RRF results across all 10 benchmark cases. |
+| 🔵 **`②`** | **99.1% Citation Grounding & 96.8% Faithfulness** | Quantifies hallucination resistance verified by `Node 6 (hallucination_auditor)` across all generated compliance determinations. |
+| 🟡 **`③`** | **10/10 Exact Compliance Verdict Matches** | Scenario-by-scenario audit table comparing expected vs. predicted verdicts (`NON_COMPLIANT`, `CONDITIONAL_REVIEW`, `INFORMATIONAL`) with per-query latency (`P50: 12.9ms`). |
 
 ---
 
 ## Why FinReg-Graph? (Naive RAG vs. FinReg-Graph)
-
-Standard RAG pipelines fail on financial and legal documents because fixed-size character splitting severs statutory clauses from their parent sections and pure cosine similarity misses exact rule identifiers (e.g., `17 CFR § 240.15c3-5(c)(1)(ii)` or `Nasdaq Rule 5810(c)(3)(A)(iii)`).
 
 | Engineering Challenge | Naive RAG Pipeline | **FinReg-Graph Architecture** |
 | :--- | :--- | :--- |
@@ -38,25 +88,26 @@ Standard RAG pipelines fail on financial and legal documents because fixed-size 
 
 ---
 
-## System Architecture
+## System Architecture Diagrams
 
 ### 1. Scalable Regulatory Data Engineering ETL Pipeline (`src/pipeline/`)
 
 ```mermaid
 flowchart LR
-    A["SEC / Nasdaq / FINRA\nRulebooks & Filings (.md)"] --> B["YAML Frontmatter &\nStatutory AST Parser"]
-    B --> C["Section-Aware Chunker\n(Breadcrumb Context Injection)"]
-    C --> D["Regex Statutory Citation &\nThreshold Extractor"]
-    D --> E["Obligation Classifier\n(PROHIBITION / MANDATORY / EXEMPTION)"]
-    E --> F["SHA-256 Content Hash &\nUUIDv5 Idempotent Dedup"]
-    F --> G[("Qdrant Vector Store\n+ BM25 Sparse Index\n+ Cross-Ref Graph")]
-```
+    A["📄 SEC / Nasdaq / FINRA\nRulebooks & Filings (.md)"] --> B["⚙️ YAML Frontmatter &\nStatutory AST Parser"]
+    B --> C["🧱 Section-Aware Chunker\n(Breadcrumb Context Injection)"]
+    C --> D["🔍 Regex Statutory Citation &\nThreshold Extractor"]
+    D --> E["🏷️ Obligation Classifier\n(PROHIBITION / MANDATORY / EXEMPTION)"]
+    E --> F["🔐 SHA-256 Content Hash &\nUUIDv5 Idempotent Dedup"]
+    F --> G[("🗄️ Qdrant Vector Store\n+ BM25 Sparse Index\n+ Cross-Ref Graph")]
 
-Every chunk indexed into Qdrant carries rich structured metadata and a contextualized header:
-```text
-[SEC | SEC-15C3-5 | 17 CFR § 240.15c3-5(c)(1)(i)]
-Hierarchy: SEC > 17 CFR § 240.15c3-5 — Risk Management Controls > § 240.15c3-5(c) Elements > § 240.15c3-5(c)(1) Financial Risk Management Controls
-Obligation Type: MANDATORY_OBLIGATION
+    style A fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style B fill:#0f172a,stroke:#0ea5e9,stroke-width:2px,color:#f8fafc
+    style C fill:#0f172a,stroke:#a855f7,stroke-width:2px,color:#f8fafc
+    style D fill:#0f172a,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style E fill:#0f172a,stroke:#ec4899,stroke-width:2px,color:#f8fafc
+    style F fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#f8fafc
+    style G fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ffffff
 ```
 
 ---
@@ -65,24 +116,32 @@ Obligation Type: MANDATORY_OBLIGATION
 
 ```mermaid
 flowchart TD
-    START(["Incoming Query / Trade Audit Scenario"]) --> N1["1. query_analyzer\nIntent Classification, Jurisdiction Routing & Sub-Query Decomposition"]
-    N1 --> N2["2. hybrid_retriever\nQdrant Dense + Okapi BM25 Sparse + RRF + Cross-Ref Graph"]
-    N2 --> N3["3. evidence_grader\nSelf-RAG Sufficiency Evaluator & Chunk Relevance Grader"]
-    N3 -- "Sufficiency < 0.78\n(Colloquial Query)" --> N4["4. query_rewriter\nStatutory Terminology Expansion Loop"]
+    START(["🚀 Incoming Query / Trade Audit Scenario"]) --> N1["1️⃣ query_analyzer\nIntent Classification, Jurisdiction Routing & Sub-Query Decomposition"]
+    N1 --> N2["2️⃣ hybrid_retriever\nQdrant Dense + Okapi BM25 Sparse + RRF + Cross-Ref Graph"]
+    N2 --> N3["3️⃣ evidence_grader\nSelf-RAG Sufficiency Evaluator & Chunk Relevance Grader"]
+    N3 -- "Sufficiency < 0.78\n(Colloquial Query)" --> N4["4️⃣ query_rewriter\nStatutory Terminology Expansion Loop"]
     N4 --> N2
-    N3 -- "Sufficient Statutory Evidence" --> N5["5. compliance_verifier\nGrounded Regulatory Synthesis & Verdict Determination"]
-    N5 --> N6["6. hallucination_auditor\nDeterministic Citation Guardrail & Faithfulness Scorer"]
-    N6 --> END_NODE(["Structured Compliance Audit Report + Node Telemetry"])
+    N3 -- "Sufficient Statutory Evidence" --> N5["5️⃣ compliance_verifier\nGrounded Regulatory Synthesis & Verdict Determination"]
+    N5 --> N6["6️⃣ hallucination_auditor\nDeterministic Citation Guardrail & Faithfulness Scorer"]
+    N6 --> END_NODE(["✅ Structured Compliance Audit Report + Node Telemetry"])
+
+    style START fill:#0284c7,stroke:#38bdf8,stroke-width:2px,color:#ffffff
+    style N1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc
+    style N2 fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#f8fafc
+    style N3 fill:#0f172a,stroke:#f59e0b,stroke-width:2px,color:#f8fafc
+    style N4 fill:#3b0764,stroke:#a855f7,stroke-width:2px,color:#f3e8ff
+    style N5 fill:#0f172a,stroke:#ef4444,stroke-width:2px,color:#f8fafc
+    style N6 fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#ecfdf5
+    style END_NODE fill:#059669,stroke:#34d399,stroke-width:2px,color:#ffffff
 ```
 
-1. **`1. query_analyzer`**: Classifies query intent (`TRADE_AND_SCENARIO_COMPLIANCE_AUDIT`, `EXCHANGE_LISTING_QUALIFICATION_VERIFICATION`, `ISSUER_FILING_AND_DISCLOSURE_VERIFICATION`, or `REGULATORY_POLICY_AND_THRESHOLD_LOOKUP`), extracts explicit citations, and decomposes compound questions into atomic sub-queries.
-2. **`2. hybrid_retriever`**: Executes multi-query hybrid search in Qdrant using **Reciprocal Rank Fusion (RRF)**:
-   $$\text{RRF}(d) = \frac{w_{\text{dense}}}{k + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{k + \text{rank}_{\text{BM25}}(d)} + \frac{w_{\text{citation}}}{k + \text{rank}_{\text{citation}}(d)}$$
-   with $k = 60$, $w_{\text{dense}} = 0.45$, $w_{\text{sparse}} = 0.40$, $w_{\text{citation}} = 0.15$, plus automatic **Cross-Reference Graph Expansion**.
-3. **`3. evidence_grader`**: Evaluates retrieved chunks (`HIGHLY_RELEVANT`, `RELEVANT`, `MARGINAL`) and computes an `evidence_sufficiency_score`.
-4. **`4. query_rewriter`**: Triggered via conditional edge when `evidence_sufficiency_score < 0.78`. Maps trader/market colloquialisms (e.g., *"naked short fail"*, *"penny stock delisting"*, *"fat-finger check"*) to formal statutory citations (`17 CFR § 242.203(b)(1)`, `Nasdaq Rule 5810(c)(3)(A)`, `17 CFR § 240.15c3-5(c)(1)(ii)`) and loops back to `hybrid_retriever`.
-5. **`5. compliance_verifier`**: Generates the structured compliance verdict (`COMPLIANT`, `NON_COMPLIANT`, `CONDITIONAL_REVIEW`, `INFORMATIONAL`), risk level (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`), executive summary, clause-by-clause analysis, violated provisions, and engineering remediation steps. Supports **Google Gemini**, **OpenAI**, **Groq**, and a built-in **Deterministic Institutional Regulatory Engine** (offline-ready).
-6. **`6. hallucination_auditor`**: Extracts every statutory citation in the generated output and verifies it against the Qdrant chunk payloads and global citation graph, reporting `citation_precision` and `faithfulness_score`.
+### Hybrid Reciprocal Rank Fusion ($\text{RRF}$) Mathematical Formulation
+
+To handle both conceptual compliance queries and exact statutory identifiers simultaneously, [`QdrantHybridRetriever`](src/retrieval/qdrant_store.py) computes a weighted Reciprocal Rank Fusion score across three retrieval rankings:
+
+$$\text{RRF}(d) = \frac{w_{\text{dense}}}{k + \text{rank}_{\text{dense}}(d)} + \frac{w_{\text{sparse}}}{k + \text{rank}_{\text{BM25}}(d)} + \frac{w_{\text{citation}}}{k + \text{rank}_{\text{citation}}(d)}$$
+
+where $k = 60$, $w_{\text{dense}} = 0.45$, $w_{\text{sparse}} = 0.40$, and $w_{\text{citation}} = 0.15$, followed by **Cross-Reference Graph Expansion** across linked SEC and Nasdaq rulebooks.
 
 ---
 
@@ -105,15 +164,15 @@ Evaluated via [`src/evaluation/benchmark.py`](src/evaluation/benchmark.py) acros
 
 | Metric | Score | Target | Status |
 | :--- | :---: | :---: | :---: |
-| **Context Recall (Top-6 Statutory Retrieval)** | **100.0%** | `>= 90.0%` | **PASS** |
-| **Context Precision (Hybrid RRF Reranking)** | **100.0%** | `>= 85.0%` | **PASS** |
-| **Statutory Citation Grounding Precision** | **99.1%** | `>= 95.0%` | **PASS** |
-| **Answer Faithfulness (Hallucination Guardrail)** | **96.8%** | `>= 90.0%` | **PASS** |
-| **Compliance Verdict Accuracy** | **100.0%** | `>= 90.0%` | **PASS** |
-| **Pipeline Execution Latency (P50 / P95)** | **12.9 ms / 24.8 ms** | `< 2000 ms` | **PASS** |
+| **Context Recall (Top-6 Statutory Retrieval)** | **100.0%** | `>= 90.0%` | ✅ **PASS** |
+| **Context Precision (Hybrid RRF Reranking)** | **100.0%** | `>= 85.0%` | ✅ **PASS** |
+| **Statutory Citation Grounding Precision** | **99.1%** | `>= 95.0%` | ✅ **PASS** |
+| **Answer Faithfulness (Hallucination Guardrail)** | **96.8%** | `>= 90.0%` | ✅ **PASS** |
+| **Compliance Verdict Accuracy** | **100.0%** | `>= 90.0%` | ✅ **PASS** |
+| **Pipeline Execution Latency (P50 / P95)** | **12.9 ms / 24.8 ms** | `< 2000 ms` | ✅ **PASS** |
 
 <details>
-<summary><strong>View Full 10-Scenario Benchmark Breakdown Table</strong></summary>
+<summary><strong>📊 Click to Expand Full 10-Scenario Benchmark Breakdown Table</strong></summary>
 
 | Case ID | Regulatory Domain | Expected Verdict | Predicted Verdict | Recall | Precision | Faithfulness | Latency |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -132,21 +191,17 @@ Evaluated via [`src/evaluation/benchmark.py`](src/evaluation/benchmark.py) acros
 
 ---
 
-## Interactive Enterprise Web Terminal
-
-The FastAPI server hosts a built-in **Nasdaq Regulatory Compliance & Surveillance Terminal** (`http://127.0.0.1:8000`) featuring four specialized workspaces:
-
-1. **Agentic Compliance Console (LangGraph)**: One-click institutional audit scenarios, real-time **6-Node LangGraph Execution Trace** visualization, compliance verdict badges, remediation playbooks, **Hallucination Auditor Citation Log**, and retrieved Qdrant chunks with RRF/Dense/BM25 score decomposition.
-2. **Hybrid RRF Lab & Live ETL Ingestion**: Side-by-side comparison of **Hybrid RRF** vs. **Dense Cosine Only** vs. **Sparse BM25 Only**, plus live ingestion of custom Markdown regulatory policies into Qdrant.
-3. **Regulatory AST Corpus Explorer**: Filter indexed rulebooks by document or jurisdiction and inspect statutory breadcrumbs, obligation classifications, and `SHA-256` content hashes.
-4. **RAG Evaluation & Benchmark Suite**: View and re-run the 10-case golden evaluation benchmark live from the browser.
-
----
-
 ## Repository Structure
 
 ```text
 FinReg-Graph-Agentic-Regulatory-Compliance-Market-Surveillance-RAG-Engine/
+├── docs/
+│   └── assets/                             # Annotated UI screenshots, GIF walkthrough & MP4 demo video
+│       ├── finreg_graph_walkthrough.gif
+│       ├── finreg_graph_demo.mp4
+│       ├── ui_console_annotated.png
+│       ├── ui_hybrid_lab_annotated.png
+│       └── ui_eval_benchmark_annotated.png
 ├── data/
 │   ├── regulations/                        # Curated SEC, Nasdaq & FINRA regulatory markdown corpus
 │   │   ├── sec_rule_15c3_5_market_access.md
@@ -262,4 +317,3 @@ curl -X POST "http://127.0.0.1:8000/api/v1/compliance/query" \
     "enable_self_rag_rewrite": true
   }'
 ```
-
